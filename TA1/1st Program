@@ -3,7 +3,7 @@ def count_characters(text):
     consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ"
     spaces = " "
     vowel_count = consonant_count = space_count = other_count = 0
-    
+
     for char in text:
         if char in vowels:
             vowel_count += 1
@@ -13,12 +13,16 @@ def count_characters(text):
             space_count += 1
         else:
             other_count += 1
-    
+
     print("Vowels:", vowel_count)
     print("Consonants:", consonant_count)
     print("Spaces:", space_count)
     print("Other characters:", other_count)
 
-# Get user input
-user_input = input("Hi! Enter any words: ")
-count_characters(user_input)
+
+while True:
+    user_input = input("Hi! Enter any words (or type 'exit' to quit): ")
+    if user_input.lower() == 'exit':
+        print("Goodbye!")
+        break
+    count_characters(user_input)
