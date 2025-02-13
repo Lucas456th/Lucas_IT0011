@@ -1,0 +1,15 @@
+from datetime import datetime
+
+# Prompt the user to enter a date
+date_input = input("Kindly Enter the date in this format (mm/dd/yyyy): ")
+
+try:
+    # this will Convert the provided string into a datetime object
+    date_object = datetime.strptime(date_input, "%m/%d/%Y")
+    
+    # Reformat the date into a more readable style
+    readable_date = date_object.strftime("%B %d, %Y")
+    
+    print(f"Date Output: {readable_date}")
+except ValueError:
+    print("you had entered an invalid date format! Please enter the correct date format in mm/dd/yyyy.")
