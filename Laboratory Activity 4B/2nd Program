@@ -5,18 +5,18 @@ def load_currency_rates(filename='currency.csv'):
     try:
         with open(filename, mode='r', encoding='utf-8-sig', errors='replace') as file:
             reader = csv.reader(file)
-            next(reader, None)  # Skip header if exists
+            next(reader, None)  
             for row in reader:
-                if len(row) < 2:  # Ensure there's at least two columns
+                if len(row) < 2:  
                     continue  
 
-                currency = row[0].strip().upper()  # Take the first column as currency code
-                rate = row[-1]  # Take the last column as the exchange rate
+                currency = row[0].strip().upper()  
+                rate = row[-1]  
 
                 try:
                     currency_rates[currency] = float(rate)
                 except ValueError:
-                    print(f"Skipping invalid rate value: {row}")  # Debugging
+                    print(f"Skipping invalid rate value: {row}")  
 
     except FileNotFoundError:
         print(f"Error: The file '{filename}' was not found.")
@@ -40,7 +40,7 @@ def main():
     currency_rates = load_currency_rates(filename)
     
     if not currency_rates:
-        return  # Exit if file not found or error in loading
+        return  
     
     try:
         usd_amount = float(input("How much USD do you have? "))
