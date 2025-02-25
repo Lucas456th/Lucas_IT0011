@@ -1,0 +1,6 @@
+Last Name: Lucas
+First Name: Andrew
+Age: 20
+Contact Number: 09266281697
+Course: BSIT-AGD
+
