@@ -1,13 +1,15 @@
+import json
+
 students = [
     ("202511", ("Bongbong", "Marcus"), 85, 90),
     ("202512", ("Emily", "Cortez"), 78, 88),
     ("202513", ("Coco", "Pemintel"), 92, 95),
     ("202514", ("Michael", "Pacquiao"), 70, 80),
-    ("202515", ("Andrew", "Lucas"), 81, 85)
-    ("202516", ("Jake", "Cyrus"), 82, 79)
-    ("202517", ("Andres", "Clifford"), 88, 85)
-    ("202518", ("Kurt", "Vito"), 88, 85)
-    ("202519", ("Aliah", "Dimatulac"), 88, 85)
+    ("202515", ("Andrew", "Lucas"), 81, 85),
+    ("202516", ("Jake", "Cyrus"), 82, 79),
+    ("202517", ("Andres", "Clifford"), 88, 85),
+    ("202518", ("Kurt", "Vito"), 88, 85),
+    ("202519", ("Aliah", "Dimatulac"), 88, 85),
     ("202520", ("Daxx", "Ramos"), 88, 85)
 ]
 file_path = None
