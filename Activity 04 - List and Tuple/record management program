@@ -1,0 +1,144 @@
+import json
+
+
+students = [
+    ("202311", ("Bongbong", "Marcus"), 85, 90),
+    ("202312", ("Emily", "Cortez"), 78, 88),
+    ("202313", ("Coco", "Pemintel"), 92, 95),
+    ("202314", ("Michael", "Pacquiao"), 70, 80),
+    ("202315", ("Andrew", "Lucas"), 88, 85)
+]
+file_path = None
+
+def calculate_grade(class_standing, major_exam):
+    return (0.6 * class_standing) + (0.4 * major_exam)
+
+def show_all_students():
+    print("\nAll Student Records:")
+    for student in students:
+        grade = calculate_grade(student[2], student[3])
+        print(f"ID: {student[0]}, Name: {student[1][0]} {student[1][1]}, Grade: {grade:.2f}")
+
+def order_by_last_name():
+    sorted_students = sorted(students, key=lambda x: x[1][1])
+    print("\nStudents Ordered by Last Name:")
+    for student in sorted_students:
+        grade = calculate_grade(student[2], student[3])
+        print(f"ID: {student[0]}, Name: {student[1][0]} {student[1][1]}, Grade: {grade:.2f}")
+
+def order_by_grade():
+    sorted_students = sorted(students, key=lambda x: calculate_grade(x[2], x[3]), reverse=True)
+    print("\nStudents Ordered by Grade:")
+    for student in sorted_students:
+        grade = calculate_grade(student[2], student[3])
+        print(f"ID: {student[0]}, Name: {student[1][0]} {student[1][1]}, Grade: {grade:.2f}")
+
+def show_student_record(student_id):
+    for student in students:
+        if student[0] == student_id:
+            grade = calculate_grade(student[2], student[3])
+            print(f"ID: {student[0]}, Name: {student[1][0]} {student[1][1]}, Grade: {grade:.2f}")
+            return
+    print("Student not found.")
+
+def add_record():
+    student_id = input("Enter Student ID (6 digits): ")
+    if not student_id.isdigit() or len(student_id) != 6:
+        print("Invalid ID format.")
+        return
+    first_name = input("Enter First Name: ")
+    last_name = input("Enter Last Name: ")
+    class_standing = float(input("Enter Class Standing Grade: "))
+    major_exam = float(input("Enter Major Exam Grade: "))
+    students.append((student_id, (first_name, last_name), class_standing, major_exam))
+    print("Record added successfully.")
+
+def edit_record(student_id):
+    for i, student in enumerate(students):
+        if student[0] == student_id:
+            first_name = input("Enter New First Name: ")
+            last_name = input("Enter New Last Name: ")
+            class_standing = float(input("Enter New Class Standing Grade: "))
+            major_exam = float(input("Enter New Major Exam Grade: "))
+            students[i] = (student_id, (first_name, last_name), class_standing, major_exam)
+            print("Record updated successfully.")
+            return
+    print("Student not found.")
+
+def delete_record(student_id):
+    global students
+    students = [student for student in students if student[0] != student_id]
+    print("Record deleted successfully.")
+
+def save_file():
+    if file_path:
+        with open(file_path, 'w') as f:
+            json.dump(students, f)
+        print("File saved successfully.")
+    else:
+        save_as_file()
+
+def save_as_file():
+    global file_path
+    file_path = input("Enter filename to save as (with .json extension): ")
+    with open(file_path, 'w') as f:
+        json.dump(students, f)
+    print("File saved successfully.")
+
+def open_file():
+    global students, file_path
+    file_path = input("Enter filename to open (with .json extension): ")
+    try:
+        with open(file_path, 'r') as f:
+            students = json.load(f)
+        print("File loaded successfully.")
+    except FileNotFoundError:
+        print("File not found.")
+
+def main():
+    while True:
+        print("""
+        1. Open File
+        2. Save File
+        3. Save As File
+        4. Show All Students Record
+        5. Order by Last Name
+        6. Order by Grade
+        7. Show Student Record
+        8. Add Record
+        9. Edit Record
+        10. Delete Record
+        11. Exit
+        """)
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            open_file()
+        elif choice == '2':
+            save_file()
+        elif choice == '3':
+            save_as_file()
+        elif choice == '4':
+            show_all_students()
+        elif choice == '5':
+            order_by_last_name()
+        elif choice == '6':
+            order_by_grade()
+        elif choice == '7':
+            student_id = input("Enter Student ID: ")
+            show_student_record(student_id)
+        elif choice == '8':
+            add_record()
+        elif choice == '9':
+            student_id = input("Enter Student ID to Edit: ")
+            edit_record(student_id)
+        elif choice == '10':
+            student_id = input("Enter Student ID to Delete: ")
+            delete_record(student_id)
+        elif choice == '11':
+            print("Exiting Program.")
+            break
+        else:
+            print("Invalid choice. Try again.")
+
+if __name__ == "__main__":
+    main()
