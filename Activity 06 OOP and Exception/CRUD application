@@ -66,34 +66,34 @@ class ItemManager:
                 raise KeyError("Item ID not found.")
 
             del self.items[item_id]
-            print(f"Item ID {item_id} deleted successfully!\n")
+            print(f"Item ID {item_id} deleted successfully!!!\n")
         except KeyError as e:
             print(f"Error: {e}\n")
         except ValueError:
-            print("Invalid ID format. Please enter a number.\n")
+            print("Invalid ID format. Please enter a Letter.\n")
 
     def run(self):
         while True:
-            print("1. Add Item")
-            print("2. View Items")
-            print("3. Update Item")
-            print("4. Delete Item")
-            print("5. Exit")
+            print("A. Add Item")
+            print("B. View Items")
+            print("C. Update Item")
+            print("D. Delete Item")
+            print("E. Exit")
             choice = input("Choose an option: ")
 
-            if choice == "1":
+            if choice == "A":
                 self.add_item()
-            elif choice == "2":
+            elif choice == "B":
                 self.view_items()
-            elif choice == "3":
+            elif choice == "C":
                 self.update_item()
-            elif choice == "4":
+            elif choice == "D":
                 self.delete_item()
-            elif choice == "5":
-                print("Exiting program...")
+            elif choice == "E":
+                print("Exiting program")
                 break
             else:
-                print("Invalid choice. Please try again.\n")
+                print("Invalid entry. Please enter only CAPITAL letter (numbers or special characters are not accpeted...)\n")
 
 if __name__ == "__main__":
     manager = ItemManager()
