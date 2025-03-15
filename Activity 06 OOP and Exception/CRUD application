@@ -1,0 +1,100 @@
+print("\n==== ITEM MANAGEMENT SYSTEM (CRUD APPLICATION) ====")
+
+class Item:
+    def __init__(self, item_id, name, description, price):
+        self.item_id = item_id
+        self.name = name
+        self.description = description
+        self.price = price
+
+class ItemManager:
+    def __init__(self):
+        self.items = {}
+
+    def add_item(self):
+        try:
+            item_id = int(input("Enter Item ID: "))
+            if item_id in self.items:
+                raise ValueError("Item ID already exists.")
+
+            name = input("Enter Item Name: ").strip()
+            description = input("Enter Item Description: ").strip()
+            price = float(input("Enter Item Price: "))
+
+            if not name or not description or price <= 0:
+                raise ValueError("Invalid data entered. Ensure fields are filled correctly.")
+
+            self.items[item_id] = Item(item_id, name, description, price)
+            print(f"Item '{name}' added successfully!\n")
+        except ValueError as e:
+            print(f"Error: {e}\n")
+
+    def view_items(self):
+        if not self.items:
+            print("No items available.\n")
+            return
+        for item in self.items.values():
+            print(f"ID: {item.item_id} | Name: {item.name} | Description: {item.description} | Price: {item.price}")
+
+    def update_item(self):
+        try:
+            item_id = int(input("Enter Item ID to update: "))
+            if item_id not in self.items:
+                raise KeyError("Item ID not found.")
+
+            print("Leave blank to keep current values.")
+            name = input("Enter new Item Name: ").strip() or self.items[item_id].name
+            description = input("Enter new Item Description: ").strip() or self.items[item_id].description
+            price = input("Enter new Item Price: ")
+            
+            if price.strip():
+                price = float(price)
+                if price <= 0:
+                    raise ValueError("Price must be greater than zero.")
+            else:
+                price = self.items[item_id].price
+
+            self.items[item_id] = Item(item_id, name, description, price)
+            print(f"Item ID {item_id} updated successfully!\n")
+        except (KeyError, ValueError) as e:
+            print(f"Error: {e}\n")
+
+    def delete_item(self):
+        try:
+            item_id = int(input("Enter Item ID to delete: "))
+            if item_id not in self.items:
+                raise KeyError("Item ID not found.")
+
+            del self.items[item_id]
+            print(f"Item ID {item_id} deleted successfully!\n")
+        except KeyError as e:
+            print(f"Error: {e}\n")
+        except ValueError:
+            print("Invalid ID format. Please enter a number.\n")
+
+    def run(self):
+        while True:
+            print("1. Add Item")
+            print("2. View Items")
+            print("3. Update Item")
+            print("4. Delete Item")
+            print("5. Exit")
+            choice = input("Choose an option: ")
+
+            if choice == "1":
+                self.add_item()
+            elif choice == "2":
+                self.view_items()
+            elif choice == "3":
+                self.update_item()
+            elif choice == "4":
+                self.delete_item()
+            elif choice == "5":
+                print("Exiting program...")
+                break
+            else:
+                print("Invalid choice. Please try again.\n")
+
+if __name__ == "__main__":
+    manager = ItemManager()
+    manager.run()
