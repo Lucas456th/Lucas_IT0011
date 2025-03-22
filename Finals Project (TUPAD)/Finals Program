@@ -3,21 +3,34 @@ from tkinter import messagebox
 import json
 import datetime
 
-DATA_FILE = "data.json"
+DATA_FILE = "tupad_data.json"
 
-def load_data():
+def load_tupad_data():
     try:
         with open(DATA_FILE, "r") as f:
             return json.load(f)
     except FileNotFoundError:
         return []
 
-def save_data(data):
+def save_tupad_data(data):
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=4)
 
-def signup():
-    def submit_signup():
+def on_enter(e):
+    e.widget.config(bg="#000", fg="#fff")
+
+def on_leave(e):
+    e.widget.config(bg="#fff", fg="#000")
+
+def styled_button(parent, text, command, row, column):
+    btn = tk.Button(parent, text=text, command=command, bg="#fff", fg="#000", borderwidth=2, relief="solid")
+    btn.grid(row=row, column=column, padx=10, pady=5)
+    btn.bind("<Enter>", on_enter)
+    btn.bind("<Leave>", on_leave)
+    return btn
+
+def tupad_signup():
+    def submit_tupad_signup():
         try:
             first_name = first_name_entry.get()
             middle_name = middle_name_entry.get()
@@ -25,10 +38,9 @@ def signup():
             birthday_str = birthday_entry.get()
             gender = gender_var.get()
 
-            #hbd validation
             datetime.datetime.strptime(birthday_str, "%Y-%m-%d")
 
-            data = load_data()
+            data = load_tupad_data()
             new_record = {
                 "first_name": first_name,
                 "middle_name": middle_name,
@@ -37,7 +49,7 @@ def signup():
                 "gender": gender,
             }
             data.append(new_record)
-            save_data(data)
+            save_tupad_data(data)
             messagebox.showinfo("Success", "Record added successfully.")
             signup_window.destroy()
 
@@ -46,44 +58,47 @@ def signup():
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {e}")
 
-    signup_window = tk.Toplevel(root)
-    signup_window.title("Sign Up")
+    signup_window = tk.Toplevel(tupad_root)
+    signup_window.title("TUPAD Sign Up")
+    signup_window.configure(bg="#F9F6EE")
 
-    tk.Label(signup_window, text="First Name:").grid(row=0, column=0)
+    tk.Label(signup_window, text="First Name:", bg="#F9F6EE", font=("MonoLisa", 12)).grid(row=0, column=0)
     first_name_entry = tk.Entry(signup_window)
     first_name_entry.grid(row=0, column=1)
 
-    tk.Label(signup_window, text="Middle Name:").grid(row=1, column=0)
+    tk.Label(signup_window, text="Middle Name:", bg="#F9F6EE", font=("MonoLisa", 12)).grid(row=1, column=0)
     middle_name_entry = tk.Entry(signup_window)
     middle_name_entry.grid(row=1, column=1)
 
-    tk.Label(signup_window, text="Last Name:").grid(row=2, column=0)
+    tk.Label(signup_window, text="Last Name:", bg="#F9F6EE", font=("MonoLisa", 12)).grid(row=2, column=0)
     last_name_entry = tk.Entry(signup_window)
     last_name_entry.grid(row=2, column=1)
 
-    tk.Label(signup_window, text="Birthday (YYYY-MM-DD):").grid(row=3, column=0)
+    tk.Label(signup_window, text="Birthday (YYYY-MM-DD):", bg="#F9F6EE", font=("MonoLisa", 12)).grid(row=3, column=0)
     birthday_entry = tk.Entry(signup_window)
     birthday_entry.grid(row=3, column=1)
 
-    tk.Label(signup_window, text="Gender:").grid(row=4, column=0)
+    tk.Label(signup_window, text="Gender:", bg="#F9F6EE", font=("MonoLisa", 12)).grid(row=4, column=0)
     gender_var = tk.StringVar(signup_window)
-    gender_var.set("Male")  #def val, diko alam pano alisin
+    gender_var.set("Male")
     gender_menu = tk.OptionMenu(signup_window, gender_var, "Male", "Female", "Other")
     gender_menu.grid(row=4, column=1)
 
-    tk.Button(signup_window, text="Submit", command=submit_signup).grid(row=5, column=0, columnspan=2)
+    styled_button(signup_window, "Submit", submit_tupad_signup, 5, 0)
 
-def view_records():
-    data = load_data()
+def tupad_view_records():
+    data = load_tupad_data()
     if not data:
         messagebox.showinfo("Info", "No records found.")
         return
 
-    records_window = tk.Toplevel(root)
-    records_window.title("View Records")
+    records_window = tk.Toplevel(tupad_root)
+    records_window.title("TUPAD View Records")
+    records_window.configure(bg="#F9F6EE")
 
-    text_area = tk.Text(records_window, width=50, height=10)
+    text_area = tk.Text(records_window, width=50, height=10, font=("MonoLisa", 12))
     text_area.pack()
+    text_area.insert(tk.END, "TEAM TUPAD\n\n")
 
     for record in data:
         text_area.insert(tk.END, f"First Name: {record['first_name']}\n")
@@ -93,10 +108,10 @@ def view_records():
         text_area.insert(tk.END, f"Gender: {record['gender']}\n")
         text_area.insert(tk.END, "-" * 20 + "\n")
 
-def search_record():
-    def perform_search():
+def tupad_search_record():
+    def perform_tupad_search():
         search_term = search_entry.get().lower()
-        data = load_data()
+        data = load_tupad_data()
         found_records = [
             record for record in data if search_term in record["first_name"].lower() or search_term in record["last_name"].lower()
         ]
@@ -106,12 +121,13 @@ def search_record():
             return
 
         results_window = tk.Toplevel(search_window)
-        results_window.title("Search Results")
+        results_window.title("TUPAD Search Results")
+        results_window.configure(bg="#F9F6EE")
 
-        text_area = tk.Text(results_window, width=50, height=10)
+        text_area = tk.Text(results_window, width=50, height=10, font=("MonoLisa", 12))
         text_area.pack()
+        text_area.insert(tk.END, "TEAM TUPAD\n\n")
 
-        #porda record
         for record in found_records:
             text_area.insert(tk.END, f"First Name: {record['first_name']}\n")
             text_area.insert(tk.END, f"Middle Name: {record['middle_name']}\n")
@@ -120,24 +136,28 @@ def search_record():
             text_area.insert(tk.END, f"Gender: {record['gender']}\n")
             text_area.insert(tk.END, "-" * 20 + "\n")
 
-    search_window = tk.Toplevel(root)
-    search_window.title("Search Record")
+    search_window = tk.Toplevel(tupad_root)
+    search_window.title("TUPAD Search Record")
+    search_window.configure(bg="#F9F6EE")
 
-    tk.Label(search_window, text="Search Term:").pack()
+    tk.Label(search_window, text="Search Term:", bg="#F9F6EE", font=("MonoLisa", 12)).pack()
     search_entry = tk.Entry(search_window)
     search_entry.pack()
 
-    tk.Button(search_window, text="Search", command=perform_search).pack()
+    styled_button(search_window, "Search", perform_tupad_search, 1, 0)
 
-root = tk.Tk()
-root.title("My Program")
+tupad_root = tk.Tk()
+tupad_root.title("TUPAD Program")
+tupad_root.configure(bg="#F9F6EE")
 
-menu_frame = tk.Frame(root)
+tk.Label(tupad_root, text="TEAM TUPAD", font=("MonoLisa", 16, "bold"), bg="#F9F6EE").pack()
+
+menu_frame = tk.Frame(tupad_root, bg="#F9F6EE")
 menu_frame.pack(pady=20)
 
-tk.Button(menu_frame, text="Sign Up", command=signup).grid(row=0, column=0, padx=10)
-tk.Button(menu_frame, text="View Records", command=view_records).grid(row=0, column=1, padx=10)
-tk.Button(menu_frame, text="Search Record", command=search_record).grid(row=0, column=2, padx=10)
-tk.Button(menu_frame, text="Exit", command=root.quit).grid(row=0, column=3, padx=10)
+styled_button(menu_frame, "Sign Up", tupad_signup, 0, 0)
+styled_button(menu_frame, "View Records", tupad_view_records, 0, 1)
+styled_button(menu_frame, "Search Record", tupad_search_record, 0, 2)
+styled_button(menu_frame, "Exit", tupad_root.quit, 0, 3)
 
-root.mainloop()
+tupad_root.mainloop()
